@@ -67,8 +67,6 @@ export default Ember.Component.extend({
     drawEarthAndMoon();
 
     drawNeos(this.get('data'));
-    setupControls();
-
   }.observes('data')
 });
 
@@ -187,13 +185,6 @@ Vrelative(km/s): "7.02"
 
       drawVoronoi(rows);
     });
-  }
-
-  function setupControls() {
-    if (getParameterByName('show-huge-rocks') == 'true') {
-      document.body.classList.add('show-rings-huge')
-      document.querySelector('input[name=show-huge]').checked = true
-    }
   }
 
   function drawEarthAndMoon() {
