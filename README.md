@@ -1,7 +1,8 @@
 # Asteroids-ember
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+Full credit for all visualization work done here goes to Mark Markoh (<a href="https://twitter.com/markmarkoh">@markmarkoh</a>).  All original code was pulled from his repo here: https://github.com/markmarkoh/asteroids.
+
+I mainly shifted things into Ember as a quick experiment to see how easy it was to use D3 and Ember.
 
 ## Prerequisites
 
@@ -50,4 +51,3 @@ Specify what it takes to deploy your app.
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
-

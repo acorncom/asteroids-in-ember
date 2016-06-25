@@ -264,6 +264,9 @@ text.ruler-label {
   right: 10px;
   left: 0;
 }
+.links-left {
+  right: auto;
+}
 
 .links ul {
   list-style-type: none;
