@@ -4,19 +4,19 @@
       <ul class="controls">
         <li>
           <label title="As determined by its asteroid absolute V-magnitude (H) value being 24.5 or lower">
-            <input type="checkbox" name="show-big"/>
+            {{input type="checkbox" checked=showBigRings}}
             Show asteroids 50m and above <em>(2x larger than <a href="http://en.wikipedia.org/wiki/Chelyabinsk_meteor" target="_blank">Chelyabinsk meteor</a>)</em>
           </label>
         </li>
         <li>
           <label title="As determined by its asteroid absolute V-magnitude (H) value being 21 or lower">
-            <input type="checkbox" name="show-huge" title="As determined by its asteroid absolute V-magnitude (H) value being 21 or lower"/>
+            {{input type="checkbox" title="As determined by its asteroid absolute V-magnitude (H) value being 21 or lower" checked=showHugeRings}}
             Show asteroids 200m and above
           </label>
         </li>
         <li>
           <label class="new" title="As determined by the year of it being discovered being the same year as its close approach date">
-            <input type="checkbox" name="show-new"/>
+            {{input type="checkbox" checked=showNew}}
              Highlight asteroids we didn't find until they neared Earth
           </label>
         </li>
@@ -57,7 +57,7 @@
     </li>
     <li class="control">
       <label>
-        <input type="checkbox" name="show-onlight"/>
+        {{input type="checkbox" checked=showOnlight}}
         View on light background
       </label>
     </li>

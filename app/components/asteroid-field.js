@@ -190,19 +190,6 @@ Vrelative(km/s): "7.02"
   }
 
   function setupControls() {
-    document.querySelector('input[name=show-big]').addEventListener('change', function(e) {
-      document.body.classList.toggle('show-rings-big');
-    });
-    document.querySelector('input[name=show-huge]').addEventListener('change', function(e) {
-      document.body.classList.toggle('show-rings-huge');
-    });
-    document.querySelector('input[name=show-onlight]').addEventListener('change', function(e) {
-      document.body.classList.toggle('onlight');
-    });
-    document.querySelector('input[name=show-new]').addEventListener('change', function(e) {
-      document.body.classList.toggle('show-rings-new');
-    });
-
     if (getParameterByName('show-huge-rocks') == 'true') {
       document.body.classList.add('show-rings-huge')
       document.querySelector('input[name=show-huge]').checked = true
