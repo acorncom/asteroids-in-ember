@@ -20,5 +20,12 @@ module.exports = function(defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
 
+  app.import('vendor/css/normalize.css');
+  app.import('vendor/css/skeleton.css');
+
+  app.import('vendor/js/d3/d3.js');
+  app.import('vendor/js/keyboard.js');
+  app.import('vendor/js/moment/moment.js');
+
   return app.toTree();
 };
