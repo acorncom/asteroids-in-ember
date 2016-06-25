@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import getParameterByName from '../utils/get-parameter-by-name';
 
 var date = new Date();
 
@@ -7,48 +8,57 @@ var size_scale = d3.scale.log()
     .domain([30, 17])
     .range([0.5, 4]);
 
-var hmag_scale = d3.scale.linear()
-  .domain([30, 29,  28,   27,   26, 25,  24, 23, 22,   21,  20,  19, 18])
-  .range([4.5, 6.5, 11.5, 17.5, 27, 42.5, 65, 90, 170,  210, 330, 670, 1000]);
+var lunar_distance_scale;
 
-  var sky, height, width;
-  var lunar_distance_scale;
-  var LUNAR_DISTANCE, MAX_LDS;
-  var offsetTop, offsetBottom;
+var sky, height, width;
+var LUNAR_DISTANCE = 384400; //km
+var MAX_LDS;
+var offsetTop, offsetBottom;
+
+var header_height, window_height;
 
 export default Ember.Component.extend({
+
+  hmagScale: Ember.computed(function() {
+    return d3.scale.linear()
+      .domain([30, 29,  28,   27,   26, 25,  24, 23, 22,   21,  20,  19, 18])
+      .range([4.5, 6.5, 11.5, 17.5, 27, 42.5, 65, 90, 170,  210, 330, 670, 1000]);
+  }),
+  lunarDistanceScale: Ember.computed(function() {
+    return d3.scale.linear().domain([0, MAX_LDS * LUNAR_DISTANCE]);
+  }),
+  timeScale: Ember.computed(function() {
+    return d3.time.scale().domain([d3.time.year.offset(date, 1),  d3.time.year.offset(date, -1)]);
+  }),
+
+  init() {
+    this._super();
+
+    // TODO: come back later and get this setup properly ...
+    // var header_height = document.getElementById("metadata").offsetHeight + document.getElementById("ticks").offsetHeight;
+    header_height = 228;
+    window_height = window.innerHeight;
+
+    offsetTop = 40;
+    offsetBottom = 40;
+
+    let ldParam = parseInt(getParameterByName('lds'), 10)
+
+    MAX_LDS = isNaN(ldParam) ? 15 : ldParam;
+  },
+
   didInsertElement: function() {
         Ember.run.once(this, 'updateChart');
       },
   updateChart: function() {
+    sky = d3.select("#sky");
 
-        //drawGuideLines("guide-light", [0.42, 0.58]);
-      var ldParam = parseInt(getParameterByName('lds'), 10)
+    height = window_height - header_height - 25;
+    width = ~~sky.style("width").replace("px", "");
+    sky.attr("height", height);
 
-        sky = d3.select("#sky");
-
-        // TODO: come back later and get this setup properly ...
-        // var header_height = document.getElementById("metadata").offsetHeight + document.getElementById("ticks").offsetHeight;
-        var header_height = 228;
-        var window_height = window.innerHeight;
-        height = window_height - header_height - 25;
-        width = ~~sky.style("width").replace("px", "");
-        sky.attr("height", height);
-
-        time_scale = d3.time.scale()
-          .domain([d3.time.year.offset(date, 1),  d3.time.year.offset(date, -1)])
-          .rangeRound([width, 0]);
-
-        offsetTop = 40;
-        offsetBottom = 40;
-
-        LUNAR_DISTANCE = 384400; //km
-
-        MAX_LDS = isNaN(ldParam) ? 15 : ldParam;
-
-        lunar_distance_scale = d3.scale.linear()
-          .domain([0, MAX_LDS * LUNAR_DISTANCE])
-          .range([10, height - 50]);
+    lunar_distance_scale = this.get('lunarDistanceScale').range([10, height - 50]);
+    time_scale = this.get('timeScale').rangeRound([width, 0]);
 
     drawGuideLines("guide-light", 4);
     drawGuideLines("guide-light", 8);
@@ -65,7 +75,6 @@ export default Ember.Component.extend({
 
 
 /*
-
 CA DistanceMinimum(LD/AU): "3.6/0.0094"
 CA DistanceNominal(LD/AU): "3.7/0.0094"
 Close-Approach (CA) Date (TDB)YYYY-mmm-DD HH:MM ± D_HH:MM: "2015-Mar-19 06:53 ±"
@@ -425,7 +434,7 @@ Vrelative(km/s): "7.02"
       }
       popover.select("#approach").text(approachPrefix + ' ' + d.closeApproach.format('MMMM Do YYYY') + '.')
       popover.select("#minimum").html(distancePrefix + '<strong>' + d.ldMinimum + ' LDs</strong>, and its')
-      popover.select("#size").text(hmag_scale(d.h).toFixed(1) + ' meters.');
+      popover.select("#size").text(this.get('hmagScale')(d.h).toFixed(1) + ' meters.');
       popover.select("#h").text(d.h);
       var popEl = popover[0][0];
       popEl.style.top = d.el.getBBox().y + 100 + 'px';
@@ -454,10 +463,3 @@ Vrelative(km/s): "7.02"
 
   //important stuff
   new K('http://www.freeasteroids.org/');
-
-function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
