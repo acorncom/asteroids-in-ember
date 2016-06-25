@@ -50,14 +50,15 @@ export default Ember.Component.extend({
           .domain([0, MAX_LDS * LUNAR_DISTANCE])
           .range([10, height - 50]);
 
+    drawGuideLines("guide-light", 4);
+    drawGuideLines("guide-light", 8);
+    drawRulers();
+    drawTimeAxis();
+    drawEarthAndMoon();
 
-        drawGuideLines("guide-light", 4);
-        drawGuideLines("guide-light", 8);
-        drawRulers(sky);
-        drawTimeAxis(sky);
-        drawEarthAndMoon(sky);
-        drawNeos(sky);
-        setupControls(sky);
+    drawNeos(this.get('data'));
+    setupControls();
+
   }.observes('data')
 });
 
@@ -74,19 +75,8 @@ Object: "(2015 FK)"
 Vinfinity(km/s): "6.98"
 Vrelative(km/s): "7.02"
 */
-  function drawNeos() {
-    d3.csv("data/all.csv")
-    .row(function(d) {
-      if ( d["Object"] === "") return;
-      return {
-        ldMinimum: +(d["CA DistanceMinimum(LD/AU)"].split("/")[0]),
-        ldNominal: +(d["CA DistanceNominal(LD/AU)"].split("/")[0]),
-        closeApproach: moment(d["Close-Approach (CA) Date (TDB)YYYY-mmm-DD HH:MM ± D_HH:MM"].split("±")[0].trim(), "YYYY-MMMM-DD HH:mm"),
-        h: +d["H(mag)"],
-        name: d["Object"]
-      }
-    })
-    .get(function(errors, rows) {
+  function drawNeos(data) {
+    data.get(function(errors, rows) {
 
       rows = rows.filter(function(row) {
         return row.ldNominal <= MAX_LDS + 0.5;
